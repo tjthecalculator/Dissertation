@@ -65,9 +65,9 @@ def read_ligand_pdbqt(filename) -> Ligand:
     with open(filename) as file:
         for line in file:
             if line.startswith('ATOM'):
-                atomtype = line.split()
+                atomtype = line.split()[2]
                 idx      = line.split()
-                coord    = np.array([float(x) for x in line.split()[:]])
+                coord    = np.array([float(x) for x in line.split()[6:9]])
                 ligand.add_atoms(Atom(idx, atomtype, coord))
             if line.startswith('BRANCH'):
                 branch   = tuple([int(x) for x in line.split()])
@@ -82,9 +82,9 @@ def read_receptor_pdbqt(filename) -> Receptor:
     with open(filename) as file:
         for line in file:
             if line.startswith('ATOM'):
-                atomtype = line.split()
+                atomtype = line.split()[2]
                 idx      = line.split()
-                coord    = np.array([float(x) for x in line.split()[:]])
+                coord    = np.array([float(x) for x in line.split()[5:8]])
                 receptor.add_atoms(Atom(idx, atomtype, coord))
 
     return receptor
