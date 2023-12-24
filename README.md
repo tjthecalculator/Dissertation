@@ -6,6 +6,6 @@ This code is a part of dissertation in "PROGRAM DEVELOPMENT FOR MOLECULAR DOCKIN
 
 To install this software.
 
-## Usage 
+## Usage
 
 To using this software, the user need to prepare ligand and receptor file in .pdbqt format by using ADFR Tool to or any preparation tools to prepare both ligand and receptor.

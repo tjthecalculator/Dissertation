@@ -37,4 +37,17 @@ def pipeline_generator(folder: str, box_size: Tuple[int, int, int]):
                 yield np.expand_dims(voxel, axis=-1), np.array([score], dtype=np.float32)
 
 if __name__ == '__main__':
-    pass
+    
+    import os
+    import tensorflow as tf
+    from keras.optimizers import Adam
+    from keras.losses import MeanSquaredError
+
+    from src.models import resnet50_score
+
+    dataset = tf.data.Dataset.from_generator(generator=pipeline_generator, args=('dataset',), output_signature=(tf.TensorSpec(shape=(), dtype=tf.float32), tf.TensorSpec(shape=(1,), dtype=tf.float32)))
+    dataset = dataset.shuffle(64).batch(64)
+
+    model = resnet50_score((), 'Vina_Score')
+    model.compile(optimizer=Adam(), loss=MeanSquaredError())
+    model.fit(dataset, epochs=100, use_multiprocessing=True, workers=os.cpu_count())
