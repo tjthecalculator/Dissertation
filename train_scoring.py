@@ -45,10 +45,12 @@ if __name__ == '__main__':
 
     from src.models import resnet50_score
 
-    dataset = tf.data.Dataset.from_generator(generator=pipeline_generator, args=('dataset',), output_signature=(tf.TensorSpec(shape=(), dtype=tf.float32), tf.TensorSpec(shape=(1,), dtype=tf.float32)))
+    box_size = (100, 100, 100, 1)
+
+    dataset = tf.data.Dataset.from_generator(generator=lambda : pipeline_generator('dataset', (box_size[:-1])), output_signature=(tf.TensorSpec(shape=box_size, dtype=tf.float32), tf.TensorSpec(shape=(1,), dtype=tf.float32)))
     dataset = dataset.shuffle(64).batch(64)
 
-    model = resnet50_score((), 'Vina_Score')
+    model = resnet50_score(box_size, 'Vina_Score')
     model.compile(optimizer=Adam(), loss=MeanSquaredError())
     model.fit(dataset, epochs=100, use_multiprocessing=True, workers=os.cpu_count())
     if not os.path.exists('models'):
