@@ -51,3 +51,6 @@ if __name__ == '__main__':
     model = resnet50_score((), 'Vina_Score')
     model.compile(optimizer=Adam(), loss=MeanSquaredError())
     model.fit(dataset, epochs=100, use_multiprocessing=True, workers=os.cpu_count())
+    if not os.path.exists('models'):
+        os.makedirs('models')
+    model.save(os.path.join('models', 'Vina_Score.h5'))
